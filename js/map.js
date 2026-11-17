@@ -121,8 +121,8 @@
   window.addEventListener('hashchange', openFromHash);
 
   Promise.all([
-    fetch('data/sites.geojson').then(r => r.json()),
-    fetch('data/maryhill-boundary.geojson').then(r => r.json()).catch(() => null)
+    fetch('data/sites.geojson', { cache: 'no-cache' }).then(r => r.json()),
+    fetch('data/maryhill-boundary.geojson', { cache: 'no-cache' }).then(r => r.json()).catch(() => null)
   ]).then(([siteData, boundary]) => {
     if (boundary) {
       L.geoJSON(boundary, {
