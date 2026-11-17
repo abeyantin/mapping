@@ -1,0 +1,115 @@
+/* ---------- Design tokens: change these to restyle the whole site ---------- */
+:root {
+  --bg: #f4f2ee;
+  --ink: #161616;
+  --muted: #6b6a66;
+  --line: #d9d6cf;
+  --surface: #ffffff;
+  --accent: #ff4d1c;        /* derelict site colour */
+  --accent-ink: #ffffff;
+  --boundary: #161616;
+  --header-h: 56px;
+  --panel-w: 400px;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: fixed; inset: 0 0 auto 0; height: var(--header-h); z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; background: var(--bg); border-bottom: 1px solid var(--line);
+}
+.brand { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
+.brand span { font-weight: 400; color: var(--muted); }
+.site-nav { display: flex; gap: 4px; }
+.site-nav a { font-family: var(--font-display); font-size: 15px; color: var(--ink); text-decoration: none; padding: 8px 12px; border-radius: 999px; }
+.site-nav a:hover { background: var(--line); }
+.site-nav a[aria-current="page"] { background: var(--ink); color: var(--bg); }
+
+/* ---------- Map page ---------- */
+.map-wrap { position: fixed; inset: var(--header-h) 0 0 0; }
+#map { position: absolute; inset: 0; z-index: 0; background: var(--bg); }
+/* Basemap look: tweak these filters to restyle the map tiles */
+.leaflet-tile-pane { filter: grayscale(1) contrast(0.9) brightness(1.08); }
+
+.leaflet-container { font-family: var(--font-body); }
+.leaflet-control-attribution { font-size: 10px; }
+
+.site-label {
+  background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 999px;
+  font-family: var(--font-display); font-weight: 700; font-size: 12px;
+  width: 22px; height: 22px; padding: 0; line-height: 22px; text-align: center;
+  box-shadow: 0 1px 4px rgba(0,0,0,.25); cursor: pointer;
+}
+.site-label::before { display: none; }
+.site-label.is-active { background: var(--ink); }
+
+.legend {
+  position: absolute; left: 12px; bottom: 24px; z-index: 500;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: var(--surface); padding: 10px 14px; border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.12); font-size: 14px; max-width: calc(100% - 24px);
+}
+.legend .swatch { width: 14px; height: 14px; border-radius: 3px; background: var(--accent); opacity: .85; }
+.legend-hint { color: var(--muted); }
+
+/* ---------- Expanding site panel ---------- */
+.panel {
+  position: absolute; z-index: 900; background: var(--surface);
+  display: flex; flex-direction: column;
+  box-shadow: 0 0 30px rgba(0,0,0,.18);
+  transition: transform .35s cubic-bezier(.2,.8,.2,1);
+}
+/* Desktop: slides in from the right */
+@media (min-width: 720px) {
+  .panel { top: 0; right: 0; bottom: 0; width: var(--panel-w); transform: translateX(100%); }
+  .panel.is-open { transform: translateX(0); }
+  .panel-grip { display: none; }
+}
+/* Phone: slides up from the bottom */
+@media (max-width: 719px) {
+  .panel { left: 0; right: 0; bottom: 0; height: 62%; border-radius: 18px 18px 0 0; transform: translateY(100%); }
+  .panel.is-open { transform: translateY(0); }
+  .panel-grip { width: 40px; height: 4px; border-radius: 2px; background: var(--line); margin: 10px auto 0; flex: none; }
+  .legend-hint { display: none; }
+}
+
+.panel-close {
+  position: absolute; top: 10px; right: 10px; width: 36px; height: 36px;
+  border: 0; border-radius: 50%; background: var(--bg); color: var(--ink);
+  font-size: 22px; line-height: 1; cursor: pointer;
+}
+.panel-close:hover { background: var(--line); }
+.panel-body { flex: 1; overflow-y: auto; padding: 24px 20px 16px; }
+.panel-kicker { margin: 0 0 6px; font-size: 13px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
+#panel-number { background: var(--accent); color: var(--accent-ink); font-family: var(--font-display); font-weight: 700; border-radius: 999px; padding: 2px 9px; }
+#panel-status { text-transform: uppercase; letter-spacing: .08em; font-size: 11px; }
+.panel h2 { font-family: var(--font-display); font-size: 30px; line-height: 1.1; letter-spacing: -0.02em; margin: 0 40px 16px 0; }
+.panel-facts { display: flex; gap: 24px; margin: 0 0 20px; padding: 12px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.panel-facts dt { font-size: 12px; color: var(--muted); }
+.panel-facts dd { margin: 2px 0 0; font-family: var(--font-display); font-size: 20px; font-weight: 500; }
+.panel-images { display: grid; gap: 8px; margin-bottom: 16px; }
+.panel-images img { width: 100%; border-radius: 8px; display: block; }
+.panel-images .placeholder {
+  aspect-ratio: 4 / 3; border-radius: 8px; border: 1px dashed var(--line); background: var(--bg);
+  display: grid; place-items: center; color: var(--muted); font-size: 13px; text-align: center; padding: 16px;
+}
+.panel-description { font-size: 15px; line-height: 1.6; }
+.panel-description .empty { color: var(--muted); font-style: italic; }
+.panel-nav { display: flex; justify-content: space-between; gap: 8px; padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); flex: none; }
+.panel-nav button {
+  font-family: var(--font-display); font-size: 14px; border: 1px solid var(--line); background: var(--surface);
+  color: var(--ink); padding: 10px 14px; border-radius: 999px; cursor: pointer;
+}
+.panel-nav button:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+/* ---------- Text pages (About etc.) ---------- */
+.page-text { height: auto; }
+.text-page { max-width: 680px; margin: 0 auto; padding: calc(var(--header-h) + 40px) 16px 64px; line-height: 1.65; }
+.text-page h1 { font-family: var(--font-display); font-size: clamp(32px, 7vw, 52px); line-height: 1.05; letter-spacing: -0.03em; margin: 0 0 12px; }
+.text-page h2 { font-family: var(--font-display); margin-top: 40px; }
+.lede { font-size: 20px; color: var(--muted); }
