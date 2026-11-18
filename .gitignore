@@ -1,2 +1,6 @@
 .DS_Store
 geojson polygons/
+*.crdownload
+*.dmg
+*.zip
+Screenshot *.png
